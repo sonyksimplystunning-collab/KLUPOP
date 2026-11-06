@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>KLU Professors of Practice</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: navy masthead → about/terms/activities/selection → dashboard → filterable POP grid → curriculum → pillar band */
+:root{
+  --navy:#0e2a5c; --navy-2:#173a78; --red:#d0202e; --gold:#f2b51c;
+  --bg:#f3f5f9; --surface:#ffffff; --fg:#14213a; --muted:#5a6680; --line:#dfe4ee; --chip:#e8edf6;
+  --on-navy:#ffffff;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0a1324; --surface:#111d35; --fg:#e7ecf6; --muted:#9aa7c2; --line:#22345a; --chip:#1a2a4c;
+  --navy:#0b1f45; --navy-2:#1b3a73; --red:#ff5763; --gold:#f5c23f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a1324; --surface:#111d35; --fg:#e7ecf6; --muted:#9aa7c2; --line:#22345a; --chip:#1a2a4c;
+  --navy:#0b1f45; --navy-2:#1b3a73; --red:#ff5763; --gold:#f5c23f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:var(--navy);color:var(--on-navy);position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:auto 0 0 0;height:5px;background:linear-gradient(90deg,var(--red) 0 60%,var(--gold) 60%)}
+.mast{padding-block:28px 40px;display:grid;gap:14px}
+.org{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:15px}
+.org b{color:var(--gold);font-size:22px;letter-spacing:.02em}
+.org span{opacity:.85;border-left:2px solid rgba(255,255,255,.35);padding-left:12px}
+.tag{justify-self:start;background:var(--red);color:#fff;font-family:var(--display);font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 14px;border-radius:3px;font-size:15px}
+h1{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(34px,6.2vw,68px);line-height:.95;margin:0;letter-spacing:.005em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--gold)}
+.lede{max-width:62ch;opacity:.88;margin:0;font-size:16px}
+.stats{display:flex;flex-wrap:wrap;gap:28px;margin-top:8px}
+.stat{display:grid}
+.stat strong{font-family:var(--display);font-size:40px;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat small{text-transform:uppercase;letter-spacing:.08em;font-size:12px;opacity:.8}
+.tools{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tools .wrap{padding-block:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+#q{flex:1 1 260px;min-width:0;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);font:inherit}
+#q:focus-visible,.chip:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--chip);color:var(--fg);font:600 13px var(--body);padding:7px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--navy-2);border-color:var(--navy-2);color:#fff}
+.count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+main{padding-block:24px 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;grid-template-columns:48px 1fr;gap:4px 14px;align-content:start;min-width:0}
+.av{grid-row:span 2;width:48px;height:48px;border-radius:8px;background:var(--navy-2);color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:20px}
+.card:nth-child(4n+2) .av{background:var(--red)}
+.card:nth-child(4n+3) .av{background:#0f7a6c}
+.card:nth-child(4n) .av{background:#6b3fa0}
+.nm{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.1;color:var(--fg);min-width:0}
+.role{font-size:13.5px;color:var(--muted);line-height:1.35;min-width:0}
+.role b{color:var(--fg);font-weight:700}
+.foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
+.subj{font-weight:700;color:var(--navy-2);font-size:14px;line-height:1.25}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) :is(.subj,td a){color:#8fb0ff}}
+:root[data-theme="dark"] :is(.subj,td a){color:#8fb0ff}
+.pg{flex:none;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--red);border:1px solid currentColor;border-radius:3px;padding:2px 7px;white-space:nowrap}
+.empty{padding:40px 0;color:var(--muted);text-align:center}
+.pillars{background:var(--navy);color:#fff}
+.pillars .wrap{padding-block:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.pl{display:flex;gap:12px;align-items:center;font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:19px;line-height:1.05}
+.pl svg{flex:none;width:40px;height:40px;stroke:var(--gold);fill:none;stroke-width:1.8}
+.cta{background:var(--gold);color:#14213a;text-align:center;font-family:var(--display);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:18px}
+.cta .wrap{padding-block:10px}
+.jump{background:var(--surface);border-bottom:1px solid var(--line)}
+.jump .wrap{display:flex;gap:22px;overflow-x:auto;padding-block:12px}
+.jump a{color:var(--fg);text-decoration:none;font-weight:600;font-size:14px;white-space:nowrap}
+.jump a:hover,.jump a:focus-visible{color:var(--red)}
+html{scroll-behavior:smooth}
+.sec{padding-block:44px}
+.sec.alt{background:var(--surface);border-block:1px solid var(--line)}
+.eyebrow{margin:0 0 4px;text-transform:uppercase;letter-spacing:.1em;font-size:12px;font-weight:700;color:var(--red)}
+h2{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(28px,4vw,40px);line-height:1;margin:0 0 18px;color:var(--fg)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.prose{max-width:66ch;color:var(--fg)}
+.prose p{margin:0 0 12px}
+.terms{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px 28px;margin:0}
+.terms div{border-top:3px solid var(--gold);padding-top:10px;min-width:0}
+.terms dt{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.1;margin-bottom:4px}
+.terms dd{margin:0;color:var(--muted);font-size:14.5px}
+.acts{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.acts li{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--navy-2);border-radius:4px;padding:14px 16px;font-size:14.5px;color:var(--muted);min-width:0}
+.acts b{display:block;color:var(--fg);font-size:16px;margin-bottom:3px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px}
+th{background:var(--navy);color:#fff;text-align:left;font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;padding:10px 14px}
+td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even) td{background:var(--chip)}
+td.s{font-weight:700}
+td.y{color:var(--red);font-weight:700;white-space:nowrap}
+td.t{color:var(--muted)}
+td a{color:var(--navy-2);font-weight:700}
+.pend{display:inline-block;font-size:12px;font-weight:600;color:var(--muted);border:1px dashed var(--muted);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.kpi strong{display:block;font-family:var(--display);font-weight:800;font-size:40px;line-height:1;color:var(--fg);font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}
+.kpi.hl{background:var(--navy);border-color:var(--navy)}
+.kpi.hl strong{color:var(--gold)}.kpi.hl span{color:#d6def0}
+.panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.panels{grid-template-columns:1fr}}
+.panel{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:16px 18px;min-width:0}
+.panel.wide{grid-column:1/-1}
+figcaption{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.1;margin-bottom:14px;color:var(--fg)}
+figcaption small{display:block;font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted);margin-top:3px}
+.bars{display:grid;gap:8px}
+.br{display:grid;grid-template-columns:minmax(90px,38%) 1fr 30px;align-items:center;gap:10px;font-size:13.5px;border-radius:4px}
+.br .lb{color:var(--fg);min-width:0;overflow-wrap:anywhere;line-height:1.2}
+.br .tr{height:14px;background:var(--line);border-radius:0 4px 4px 0;position:relative}
+.br .fl{position:absolute;inset:0 auto 0 0;background:var(--navy-2);border-radius:0 4px 4px 0}
+.br.top .fl{background:var(--red)}
+.br .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--fg)}
+.br:hover .fl,.cl:hover .cb{filter:brightness(1.2)}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:end;height:200px;border-bottom:1px solid var(--muted);padding-top:22px}
+.cl{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.cl .v{font-weight:700;font-variant-numeric:tabular-nums;font-size:14px;color:var(--fg)}
+.cb{width:min(56px,100%);background:var(--navy-2);border-radius:4px 4px 0 0}
+.cl.top .cb{background:var(--red)}
+.xl{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center;font-size:13px;color:var(--muted);padding-top:6px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) :is(.fl,.cb){background:#5b86e0}}
+:root[data-theme="dark"] :is(.fl,.cb){background:#5b86e0}
+.panels .br.top .fl,.panels .cl.top .cb{background:var(--red)}
+.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.steps li{counter-increment:st;position:relative;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:44px 16px 16px;font-size:14.5px;color:var(--muted);min-width:0}
+.steps li::before{content:counter(st);position:absolute;top:12px;left:16px;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font:700 13px var(--body)}
+.steps b{display:block;color:var(--fg);font-size:16px;margin-bottom:4px}
+.h2b{margin-top:8px}
+.norms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:760px){.norms{grid-template-columns:1fr}}
+.nm-col{background:var(--bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:6px;padding:18px 20px;min-width:0}
+.nm-col h3{font-family:var(--display);font-weight:700;font-size:22px;margin:0 0 10px;color:var(--fg)}
+.nm-col ul{margin:0;padding-left:18px;display:grid;gap:8px;font-size:14.5px;color:var(--fg)}
+.curr{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:30px}
+.cu{display:grid;gap:2px;text-decoration:none;background:var(--navy);color:#fff;border-radius:8px;padding:16px 18px;border-bottom:4px solid var(--gold)}
+.cu:hover,.cu:focus-visible{background:var(--navy-2);outline:none}
+.cu-p{font-family:var(--display);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase}
+.cu-b{color:var(--gold);font-weight:700;font-size:14px}
+.cu-u{font-size:12.5px;opacity:.8;margin-top:6px}
+.cu-u::after{content:" ↗"}
+.h3t{font-family:var(--display);font-weight:700;font-size:22px;margin:0 0 12px;color:var(--fg)}
+td.lk{white-space:nowrap}
+td.lk a{display:inline-block;margin-right:12px}
+.panel,.kpi{background:var(--surface)}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .15s,box-shadow .15s}.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(14,42,92,.12)}}
+@media (max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap mast">
+    <div class="org"><b>KL University</b><span>Alumni Relations</span></div>
+    <div class="tag">Professors of Practice (POP)</div>
+    <h1>Leaders shaping <em>technology, industry</em> &amp; public service</h1>
+    <p class="lede">Alumni and industry leaders from Meta, Microsoft, Google, Morgan Stanley, Synopsys, AMD and more, bringing real industry practice into KLU's B.Tech, BBA and MBA classrooms.</p>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Page sections"><div class="wrap">
+  <a href="#about">What is POP</a><a href="#terms">Key terms</a><a href="#activities">Activities</a><a href="#selection">Selection &amp; norms</a><a href="#dashboard">Dashboard</a><a href="#directory">Our POPs</a><a href="#syllabus">Curriculum</a>
+</div></nav>
+
+<section id="about" class="sec">
+  <div class="wrap two">
+    <div>
+      <p class="eyebrow">About the programme</p>
+      <h2>What is a Professor of Practice?</h2>
+    </div>
+    <div class="prose">
+      <p>A Professor of Practice (POP) is a distinguished professional from industry, government or public service who joins the university to teach and mentor students, without the conventional academic requirements of a Ph.D. or research publications. The value they bring is field experience: how technology is actually built, delivered, secured and managed.</p>
+      <p>The role follows the UGC guidelines for engaging Professors of Practice in higher education institutions. Experts with at least 15 years of service or professional experience in their field are eligible, and a POP is engaged for a fixed term rather than as a regular faculty post.</p>
+      <p>At KL University, the POP programme is run through the Alumni Relations office. Most of our POPs are KLU alumni now working at global companies, who return to teach subjects in the B.Tech, BBA and MBA programmes.</p>
+    </div>
+  </div>
+</section>
+
+<section id="terms" class="sec alt">
+  <div class="wrap">
+    <p class="eyebrow">Glossary</p>
+    <h2>Key terms</h2>
+    <dl class="terms">
+      <div><dt>Professor of Practice (POP)</dt><dd>An industry or public-service expert engaged by the university to teach, co-teach and mentor, based on professional experience rather than academic credentials.</dd></div>
+      <div><dt>Subject mapping</dt><dd>Assigning each POP to a course in the curriculum that matches their working expertise, such as AI, Project Delivery or Analog VLSI Design.</dd></div>
+      <div><dt>Roadmap</dt><dd>The proposal a POP candidate submits: the subjects they can handle and the industry-gap add-ons they would offer.</dd></div>
+      <div><dt>Industry gap add-ons</dt><dd>Modules, workshops or certifications that bridge where graduates fall short when they join industry.</dd></div>
+      <div><dt>Project-based delivery</dt><dd>Courses taught through hands-on projects rather than lectures alone, for practical and interactive learning.</dd></div>
+      <div><dt>Engagement categories</dt><dd>Under UGC guidelines a POP can be industry-funded, funded by the institution's own resources, or engaged on an honorary basis.</dd></div>
+      <div><dt>Tenure</dt><dd>A fixed-term engagement, initially up to one year and extendable based on the POP's contribution, within the limit set by UGC.</dd></div>
+      <div><dt>Co-teaching</dt><dd>A POP delivers sessions alongside the regular course faculty, who handles assessment and academic records.</dd></div>
+      <div><dt>POP Cell</dt><dd>The office that sources and onboards POPs, schedules their sessions with timetable in-charges, collects student feedback and handles logistics.</dd></div>
+      <div><dt>Alumni POP</dt><dd>A KLU graduate who returns to campus as a Professor of Practice, linking alumni relations with teaching.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="activities" class="sec">
+  <div class="wrap">
+    <p class="eyebrow">What POPs do on campus</p>
+    <h2>Activities</h2>
+    <ul class="acts">
+      <li><b>Course delivery</b>Teaching or co-teaching the mapped subject, in person or online, with real case studies from their organisations.</li>
+      <li><b>Curriculum input</b>Reviewing syllabi and suggesting updates so course content matches current industry tools and practice.</li>
+      <li><b>Projects and capstones</b>Guiding student projects, hackathon teams and final-year capstones on industry problem statements.</li>
+      <li><b>Mentorship</b>One-to-one and small-group mentoring on careers, higher studies and global opportunities.</li>
+      <li><b>Workshops and expert talks</b>Hands-on sessions on tools and technologies such as cloud, Gen AI, data engineering and cybersecurity.</li>
+      <li><b>Internships and placements</b>Opening doors to internships, mock interviews and recruitment connections with their companies.</li>
+      <li><b>Patents and innovation</b>Supporting student and faculty ideas toward patent filings, prototypes and startups.</li>
+      <li><b>Faculty development</b>Sharing industry practice with faculty through FDPs and joint research or consultancy.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="selection" class="sec alt">
+  <div class="wrap">
+    <p class="eyebrow">Joining as a POP</p>
+    <h2>Selection process</h2>
+    <ol class="steps">
+      <li><b>Initial conversation</b>The candidate speaks with the POP programme manager about their background, expertise and interest in teaching.</li>
+      <li><b>Curriculum review</b>The candidate goes through the B.Tech (Y25 and Y26), BBA and MBA curricula linked below.</li>
+      <li><b>Roadmap submission</b>The candidate submits a roadmap listing the subjects they can teach, co-teach or support through guest lectures, labs or projects, and the industry-gap add-ons (modules, workshops or certifications) they propose.</li>
+      <li><b>Recruitment team interaction</b>Once the roadmap is received, an interaction is arranged with the university's Recruitment Team.</li>
+      <li><b>Approvals and onboarding</b>After approval, the POP is onboarded, mapped to subjects and scheduled into the timetable by the POP Cell.</li>
+    </ol>
+
+    <h2 class="h2b">Norms for POPs</h2>
+    <div class="norms">
+      <div class="nm-col">
+        <h3>Travel and accommodation</h3>
+        <ul>
+          <li><b>POPs based abroad:</b> round-trip economy air tickets each semester, with accommodation at the campus guest house for a minimum stay of one week.</li>
+          <li><b>POPs based in India:</b> round-trip economy air tickets each semester, with guest-house accommodation for a minimum stay of 2 days, 3 to 4 times during the semester.</li>
+          <li><b>During the campus stay:</b> student and faculty development programmes, workshops or hands-on sessions for at least 4 and up to 6 hours a day.</li>
+          <li>An honorarium is paid as per university norms.</li>
+        </ul>
+      </div>
+      <div class="nm-col">
+        <h3>Common conditions</h3>
+        <ul>
+          <li><b>FDPs, seminars, workshops and hackathons:</b> active participation in offline events during visits to campus.</li>
+          <li><b>Project-based delivery:</b> courses are delivered through projects for practical, interactive learning.</li>
+          <li><b>Guidance and advising:</b> guiding and mentoring students through the delivery of their projects.</li>
+          <li><b>Weekly connections:</b> weekly sessions with students, offline or online, of 2 hours each in a single stretch.</li>
+          <li><b>Total hours:</b> 50 to 55 hours per semester per course across these activities.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dashboard" class="sec">
+  <div class="wrap">
+    <p class="eyebrow">Programme at a glance</p>
+    <h2>Dashboard</h2>
+    <div class="kpis" id="kpis"></div>
+    <div class="panels">
+      <figure class="panel"><figcaption>Where our POPs are based<small>By country</small></figcaption><div class="bars" id="cCountry"></div></figure>
+      <figure class="panel"><figcaption>Organisations<small id="orgNote"></small></figcaption><div class="bars" id="cOrg"></div></figure>
+      <figure class="panel"><figcaption>Popular subjects<small>Number of POPs per subject, top 8</small></figcaption><div class="bars" id="cSubj"></div></figure>
+      <figure class="panel"><figcaption>Indian cities<small>POPs based in India, by city</small></figcaption><div class="bars" id="cCity"></div></figure>
+      <figure class="panel wide"><figcaption>Subject areas<small>Mapped subjects grouped by domain</small></figcaption><div class="bars" id="cDomain"></div></figure>
+    </div>
+  </div>
+</section>
+
+<section id="directory">
+<div class="tools">
+  <div class="wrap">
+    <input id="q" type="search" placeholder="Search name, company, subject or city" aria-label="Search Professors of Practice">
+    <div class="chips" role="group" aria-label="Filter by programme">
+      <button class="chip" data-y="all" aria-pressed="true">All programmes</button>
+      <button class="chip" data-y="B.Tech" aria-pressed="false">B.Tech</button>
+      <button class="chip" data-y="MBA / BBA" aria-pressed="false">MBA / BBA</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>No Professors of Practice match that search.</p>
+</main>
+</section>
+
+<section id="syllabus" class="sec alt">
+  <div class="wrap">
+    <p class="eyebrow">Course material</p>
+    <h2>Curriculum</h2>
+    <p class="prose" style="margin:0 0 18px">Full curricula for the programmes our Professors of Practice teach in. POP candidates choose their subjects from these.</p>
+    <div class="curr">
+      <a class="cu" href="https://y26btech.klef.in/" target="_blank" rel="noopener"><span class="cu-p">B.Tech</span><span class="cu-b">Y26 batch</span><span class="cu-u">y26btech.klef.in</span></a>
+      <a class="cu" href="https://y25btech.klef.in/" target="_blank" rel="noopener"><span class="cu-p">B.Tech</span><span class="cu-b">Y25 batch</span><span class="cu-u">y25btech.klef.in</span></a>
+      <a class="cu" href="https://y26bba.klef.in/" target="_blank" rel="noopener"><span class="cu-p">BBA</span><span class="cu-b">Y26 batch</span><span class="cu-u">y26bba.klef.in</span></a>
+      <a class="cu" href="https://y26mba.klef.in/" target="_blank" rel="noopener"><span class="cu-p">MBA</span><span class="cu-b">Y26 batch</span><span class="cu-u">y26mba.klef.in</span></a>
+    </div>
+    <h3 class="h3t">Subjects taught by our POPs</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Subject</th><th>Taught by</th><th>Curriculum</th></tr></thead>
+      <tbody id="syl"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="pillars" aria-label="Programme pillars">
+  <div class="wrap">
+    <div class="pl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>Industry<br>Readiness</div>
+    <div class="pl"><svg viewBox="0 0 24 24"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M2.5 20c.6-3.6 2.8-6 5.5-6s4.9 2.4 5.5 6M13.5 15.2c1-.8 2.2-1.2 3.5-1.2 2.3 0 4 1.8 4.5 5"/></svg>Student<br>Mentorship</div>
+    <div class="pl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.8 6 3.8 9.5s-1.2 6.7-3.8 9.5c-2.6-2.8-3.8-6-3.8-9.5S9.4 5.3 12 2.5"/></svg>Global<br>Perspective</div>
+    <div class="pl"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg>Impacting<br>Society</div>
+  </div>
+</section>
+<div class="cta"><div class="wrap">Be part of the change</div></div>
+
+<script>
+const P=[
+["Mr Kotesh Mukkamala","Data Engineer","Meta","Menlo Park, California, USA","AI"],
+["Mr Kiran Palla","IT Executive & Senior Advisor to ACIO IT","Internal Revenue Service","USA","AI"],
+["Mr Fiazuddin Shaik","Principal Application Engineer","Capital One","USA","Fundamentals of Big Data"],
+["Mrs Sreedevi Ande","Senior Delivery Project Manager","Microsoft","Hyderabad","Project Delivery"],
+["Dr Vijay Suman Pasupuleti","Senior Staff R&D Engineer","Synopsys","Bangalore","Theory of Computation"],
+["Mr Ramalingeshwar Reddy Chirra","Product Cost Finance Manager – Supply Chain & Logistics","Lucid Motors","Saudi Arabia","Data Analytics & Visualization"],
+["Mr CH Rama Krishna","Technical Manager","AMD","Bangalore","Project Delivery"],
+["Mr Srikanth Annamareddy","Operations Supervisor","Costco Wholesale UK","Coventry, United Kingdom","Advanced Embedded Systems"],
+["Mr Rohit Ponnapalli","Chief Information Security Officer (CISO)","Envoy Global","Hyderabad","Security Governance & Management"],
+["Mr Sidharthan Rajendran","Senior Software Engineer","Microsoft","Bangalore","SOA Programming & Microservices"],
+["Mr Ramesh P","Founder & CEO","PGK Technologies","Hyderabad","Project Delivery"],
+["Mrs Padmaja Mitravinda Kolachalam","Principal Consultant – BI, Data & Analytics","Infosys","Bangalore","Project Delivery"],
+["Mr Abhinav Garg","Project Manager","KPMG","Delhi","Project Delivery"],
+["Mr Raj Cheemakurthi","COO; Managing Director & Board Member","PEAC Poland","Warsaw, Poland","Project Delivery"],
+["Dr Sree Ranjani Rajendran","Assistant Professor, EE & CS Dept.","Florida Atlantic University","Boca Raton, Florida, USA","Analog VLSI Design"],
+["Mr Safiuddin Khaja","Cloud Engineer, AI","Google","Hyderabad","Project Delivery"],
+["Mrs Hema Jampala","Senior Engineering Manager","Intuit","Canada","Deep Learning"],
+["Mr Ram Morla","Chief Data Strategist, CDO Advisory – Data Practice Leader for UK & Ireland Insurance","","United Kingdom","Project Delivery"],
+["Mr Devi Prasad","Enterprise Architect – Telecom","TCS","India & United Kingdom","Cloud Infrastructure Engineering"],
+["Mrs Bindu Budha","DevOps & Automation Engineer","IBM UK Ltd","United Kingdom","Project Delivery"],
+["Mr Lalith Kumar D","Data Scientist & Cloud Engineer, AI","Google","Bangalore","Data Science"],
+["Mr Rama Krishna Prasad Vemana","Vice President","Morgan Stanley","Bangalore","OOPs Through Java"],
+["Mr Uday Mannam","Senior Product Manager, Azure Data Products","Microsoft","Hyderabad","Data Analytics & Visualization"],
+["Mr Sai Satish D","President","AIMER Society (Indian Servers)","Vijayawada","Cryptanalysis & Cyber Defence"],
+["Mr Aditya Dua","Professional Services Manager","MongoDB","Delhi","Project Delivery"],
+["Mr Sasi Kumar","Senior Manager II","Harman International","Dubai","AI and Controls for Autonomous Future Transport"],
+["Mr Rajanikanth T","Director & Co-Founder","PGK Technologies","Hyderabad","Project Delivery"],
+["Mr Nanda Kishore","Senior Advisor, Data Science","Dell Technologies","Hyderabad","Generative Adversarial Networks"],
+["Dr B. B. M Krishna Kanth","Senior Technical Manager (Gen AI)","HCLTech","Hyderabad","Machine Learning Operations, Natural Language Processing"],
+["Mr Rajaram Kankipati","Senior Data Scientist","Freshworks","Bangalore, India","Machine Learning Operations, Data Science"],
+["Dr Ramesh Babu Kanneganti","Chairman, National Security Studies Experts Committee","UGC, Govt. of India","Hyderabad","Project Delivery"],
+["Mr Prabhakar Reddy Kolanu","Senior Vice President – Enterprise Delivery","SimpleWorks (Simple CRM)","Hyderabad","Information Assurance & Security"],
+["Mr Sandeep N","Strategic Management","MBA","Guntur","Strategic Management (MBA)"],
+["Mr Suresh Tananki","Engineering Program Manager, Advanced Embedded Systems","Carrier Corporation","Hyderabad","Project Delivery"],
+["Mr Sai Sree Harish Nune","Senior Software Engineer 2","Sophos","Bengaluru, India","Front End Development Frameworks for Web Applications"],
+["Dr Chandrashekar Reddy","Data Engineering for Financial Systems","","Hyderabad","Data Engineering for Financial Systems"]
+];
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const initials=n=>n.replace(/^(Mr|Mrs|Dr|Ms)\.?\s+/,"").split(/\s+/).filter(w=>/^[A-Za-z]{2,}/.test(w)).slice(0,2).map(w=>w[0]).join("");
+const prog=p=>/MBA|BBA/.test(p[4])?"MBA / BBA":"B.Tech";
+const grid=document.getElementById("grid"),q=document.getElementById("q"),empty=document.getElementById("empty");
+let pf="all";
+function render(){
+  const t=q.value.trim().toLowerCase();
+  const list=P.filter(p=>(pf==="all"||prog(p)===pf)&&(!t||p.slice(0,5).join(" ").toLowerCase().includes(t)));
+  grid.innerHTML=list.map(p=>`<article class="card">
+    <div class="av" aria-hidden="true">${initials(p[0])}</div>
+    <div class="nm">${esc(p[0])}</div>
+    <div class="role">${esc(p[1])}${p[2]?`<br><b>${esc(p[2])}</b>`:""}<br>${esc(p[3])}</div>
+    <div class="foot"><span class="subj">${esc(p[4])}</span><span class="pg">${prog(p)}</span></div>
+  </article>`).join("");
+  empty.hidden=list.length>0;
+}
+q.addEventListener("input",render);
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+  pf=b.dataset.y;
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c===b?"true":"false"));
+  render();
+}));
+render();
+
+/* ---------- Dashboard ---------- */
+const country=l=>/USA/.test(l)?"USA":/United Kingdom/.test(l)?"United Kingdom":/Saudi/.test(l)?"Saudi Arabia":/Poland/.test(l)?"Poland":/Canada/.test(l)?"Canada":/Dubai/.test(l)?"UAE (Dubai)":"India";
+const city=l=>{const c=l.split(",")[0].trim();return c==="Bengaluru"?"Bangalore":c};
+const DOM={"AI & Machine Learning":["AI","Deep Learning","Generative Adversarial Networks","Machine Learning Operations, Natural Language Processing","Machine Learning Operations, Data Science","AI and Controls for Autonomous Future Transport"],
+"Data & Analytics":["Fundamentals of Big Data","Data Analytics & Visualization","Data Science","Data Engineering for Financial Systems"],
+"Project & Strategic Management":["Project Delivery","Strategic Management (MBA)"],
+"Cybersecurity":["Security Governance & Management","Cryptanalysis & Cyber Defence","Information Assurance & Security"],
+"Software & Cloud":["SOA Programming & Microservices","OOPs Through Java","Cloud Infrastructure Engineering","Front End Development Frameworks for Web Applications"],
+"Core ECE & Theory":["Theory of Computation","Advanced Embedded Systems","Analog VLSI Design"]};
+const domainOf=s=>Object.keys(DOM).find(k=>DOM[k].includes(s))||"Other";
+const tally=f=>{const m={};P.forEach(p=>[].concat(f(p)).forEach(k=>m[k]=(m[k]||0)+1));return Object.entries(m).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))};
+function bars(id,rows,unit="POPs"){
+  const max=Math.max(...rows.map(r=>r[1]));
+  document.getElementById(id).innerHTML=rows.map(([k,v],i)=>`<div class="br${i===0?" top":""}" title="${esc(k)}: ${v} ${unit}"><span class="lb">${esc(k)}</span><span class="tr"><span class="fl" style="width:${(v/max*100).toFixed(1)}%"></span></span><span class="v">${v}</span></div>`).join("");
+}
+const byCountry=tally(p=>country(p[3]));
+const intl=P.filter(p=>country(p[3])!=="India").length;
+const orgName=p=>p[2]&&p[2]!=="MBA"?p[2]:null;
+const orgs=tally(p=>orgName(p)?[orgName(p)]:[]);
+document.getElementById("kpis").innerHTML=[
+  ["hl",P.length,"Professors of Practice"],["",byCountry.length,"Countries represented"],
+  ["",intl,"Based outside India"],["",orgs.length,"Organisations"]
+].map(([c,n,l])=>`<div class="kpi ${c}"><strong>${n}</strong><span>${l}</span></div>`).join("");
+bars("cCountry",byCountry);
+const multi=orgs.filter(o=>o[1]>1),single=orgs.filter(o=>o[1]===1).length;
+bars("cOrg",multi);
+document.getElementById("orgNote").textContent=`Organisations with more than one POP. ${single} more organisations have one POP each.`;
+bars("cSubj",tally(p=>p[4]).slice(0,8));
+bars("cCity",tally(p=>country(p[3])==="India"?[city(p[3])]:[]));
+bars("cDomain",tally(p=>domainOf(p[4])));
+
+/* ---------- Curriculum table ---------- */
+const CURR={"B.Tech":[["B.Tech Y26","https://y26btech.klef.in/"],["B.Tech Y25","https://y25btech.klef.in/"]],
+"MBA / BBA":[["MBA","https://y26mba.klef.in/"],["BBA","https://y26bba.klef.in/"]]};
+const subj={};
+P.forEach(p=>{const s=subj[p[4]]??={t:[],g:prog(p)};s.t.push(p[0])});
+document.getElementById("syl").innerHTML=Object.keys(subj).sort((a,b)=>a.localeCompare(b)).map(k=>{
+  const s=subj[k];
+  return `<tr><td class="s">${esc(k)}</td><td class="t">${s.t.map(esc).join(", ")}</td><td class="lk">${CURR[s.g].map(([l,u])=>`<a href="${u}" target="_blank" rel="noopener">${l}</a>`).join("")}</td></tr>`;
+}).join("");
+</script>
+
+</body>
+</html>
